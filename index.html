@@ -3,46 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <title>LUCRAI% | Calculadora de Ecommerce</title>
 </head>
 <body class="font-[Open_Sans]">
-    <container class="flex flex-col justify-start p-2 bg-neutral-50">
+    <container class="flex flex-col gap-3 p-2 bg-neutral-50">
         <H1 class="font-bold text-3xl text-center">LUCRAI%</H1>
-        <div class="bg-stone-900 text-white rounded-xl m-2">
-            <form action="" class="flex flex-row justify-around items-center flex-wrap p-2 rounded-md">
+        <div class="bg-stone-900 text-white rounded-xl py-2">
+            <form id="formLucrai" action="" class="flex flex-row justify-around items-center flex-wrap p-2 rounded-md">
                 <div class="p-1">
-                    <label for="pdt_custo" class="">Custo</label><br>
-                    <input class="w-20 bg-gray-100 rounded-md" type="number" id="pdt_custo" name="pdt_custo">
+                    <label for="pdtcusto" class="">Custo</label><br>
+                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md" type="number" id="pdtcusto" name="pdtcusto" onchange="calcularLucro()">
                 </div>
                 <div class="p-1">
-                    <label for="pdt_custo" class="">Imposto</label><br>
-                    <input class="w-20 bg-gray-100 rounded-md" type="number" id="pdt_imposto" name="pdt_imposto">
+                    <label for="pdtcusto" class="">Imposto</label><br>
+                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md" type="number" id="pdtimposto" name="pdtimposto" onchange="calcularLucro()">
                 </div>
                 <div class="p-1">
-                    <label for="pdt_embalagem" class="">Embalo</label><br>
-                    <input class="w-20 bg-gray-100 rounded-md" type="number" id="pdt_embalagem" name="pdt_embalagem">
+                    <label for="pdtembalagem" class="">Embalo</label><br>
+                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md" type="number" id="pdtembalagem" name="pdtembalagem" onchange="calcularLucro()">
                 </div>
                 <div class="p-1">
-                    <label for="pdt-frete" class="">Envio</label><br>
-                    <input class="w-20 bg-gray-100 rounded-md" type="number" id="pdt-envio" name="pdt-envio">
+                    <label for="pdtfrete" class="">Envio</label><br>
+                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md" type="number" id="pdtenvio" name="pdtenvio" onchange="calcularLucro()">
                 </div>
                 <div class="p-1">
-                    <label for="pdt-kit" class="">Kit</label><br>
-                    <input class="w-20 bg-gray-100 rounded-md" type="number" id="pdt-kit" name="pdt-kit">
+                    <label for="pdtkit" class="mb-3">Kit</label><br>
+                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md" type="number" id="pdtkit" name="pdtkit" onchange="calcularLucro()">
                 </div>
                 <div class="p-1">
-                    <label for="pdt-margem" class="">Margem</label><br>
-                    <input class="w-20 bg-gray-100 rounded-md" type="number" id="pdt-margem" name="pdt-margem">
+                    <label for="pdtmargem" class="">Margem</label><br>
+                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md" type="number" id="pdtmargem" name="pdtmargem" onchange="calcularLucro()">
                 </div>
             </form>
         </div>
-        <div class="">
-            <p>Shopee</p>
+        <div class="p-4 bg-orange-500 rounded-xl">
+            <p class="mb-1" id="shopee">Shopee</p>
+            <div class="flex flex-row gap-2 flex-wrap justify-between items-center">
+                <p>Venda: </p>
+                <p>Comissão: </p>
+                <p>Imposto: </p>
+                <p>Taxa: </p>
+            </div>
         </div>
-        <div class="">
-            <p>Mercado Livre</p>
+        <div class="p-4 bg-amber-300 rounded-xl">
+            <p class="mb-1" id="mercadolivre">Mercado Livre</p>
+            <div class="flex flex-row gap-2 flex-wrap justify-between items-center">
+                <p>Venda: </p>
+                <p>Comissão: </p>
+                <p>Imposto: </p>
+                <p>Taxa: </p>
+            </div>
         </div>
     </container>
+
+    <script src="js/script.js"></script>
 </body>
 </html>
