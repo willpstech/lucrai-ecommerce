@@ -8,7 +8,7 @@
     <title>LUCRAI% | Calculadora de Ecommerce</title>
 </head>
 <body class="font-[Open_Sans]">
-    <container class="flex flex-col gap-3 p-2 bg-neutral-50">
+    <container class="flex flex-col gap-3 p-3 bg-neutral-50">
         <H1 class="font-bold text-3xl text-center">LUCRAI%</H1>
         <div class="bg-stone-900 text-white rounded-xl py-2">
             <form id="formLucrai" action="" class="flex flex-row justify-around items-center flex-wrap p-2 rounded-md">
@@ -37,7 +37,26 @@
                     <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md" type="number" id="pdtmargem" name="pdtmargem" onchange="calcularLucro()">
                 </div>
             </form>
+            
         </div>
+
+        <div class="flex gap-3">
+            <div class="flex flex-col gap-1 items-center bg-neutral-100 rounded-xl p-1">
+                <img src="src/images/mercadolivre.svg" alt="mercadoLivre" class="w-8 h-8">
+                <label class="switch">
+                    <input type="checkbox" id="mercadoLivre" value="mercadoLivre" onchange="calcularLucro()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="flex flex-col gap-1 items-center bg-neutral-100 rounded-xl p-1">
+                <img src="src/images/shopee.svg" alt="shopee" class="w-8 h-8">
+                <label class="switch">
+                    <input type="checkbox" id="shopee" value="shopee" onchange="calcularLucro()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
         <div class="p-4 bg-orange-500 rounded-xl">
             <p class="mb-1" id="shopee">Shopee</p>
             <div class="flex flex-row gap-2 flex-wrap justify-between items-center">

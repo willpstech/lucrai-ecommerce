@@ -7,9 +7,8 @@ calcularLucro = () => {
     let pdtKit = parseFloat(document.querySelector("#pdtkit").value, 10) || 1;
     let pdtMargem = parseFloat(document.querySelector("#pdtmargem").value, 10) || 0;
 
-    let canalMLivre = document.querySelector("#Mercadolivre");
+    let canalMLivre = document.getElementById("#mercadolivre");
 
-    let venda = 0;
 
     if(canalMLivre.textContent.includes("MercadoLivre")){
         let custoTotal = (pdtCusto * pdtKit) + pdtFrete + pdtEmbalagem;
