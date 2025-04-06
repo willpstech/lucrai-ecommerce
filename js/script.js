@@ -7,43 +7,34 @@ calcularLucro = () => {
     let pdtKit = parseFloat(document.querySelector("#pdtkit").value, 10) || 1;
     let pdtMargem = parseFloat(document.querySelector("#pdtmargem").value, 10) || 0;
 
-    let canalMLivre = document.getElementById("#mercadolivre");
-
-
-    if(canalMLivre.textContent.includes("MercadoLivre")){
-        let custoTotal = (pdtCusto * pdtKit) + pdtFrete + pdtEmbalagem;
-        
-         // Estimativa inicial para o preço de venda
-    let precoVenda = custoTotal * (1 + margemDesejada / 100) / (1 - imposto / 100);
-
-    for (let tentativa = 0; tentativa < 100000; tentativa++) {
-        // Calcula a margem de lucro real baseado no imposto aplicado ao preço de venda
-        let receitaTotal = precoVenda * (1 - imposto / 100);
-        let lucroReal = receitaTotal - custoTotal;
-        let margemReal = (lucroReal / custoTotal) * 100;
-
-        // Verifica se a margem de lucro real está próxima da margem desejada
-        if (Math.abs(margemReal - margemDesejada) < 0.0001) {
-            return precoVenda;
-        }
-
-        // Ajusta o preço de venda
-        precoVenda *= (1 + (margemDesejada - margemReal) / 100);
-    }
-
-    return precoVenda;
-    }
-
+    let canalMLivre = window.document.getElementById("meli");
+    // Identifica quais switches estão selecionados
+    let canais = document.querySelectorAll('input[type="checkbox"]:checked');
+    let resultadosDiv = document.getElementById('vendameli');
+    resultadosDiv.innerHTML = '';  // Limpa resultados anteriores
 
 }
 
-// Exemplo de uso
-let pdtCusto = 100;      // Exemplo: R$ 100,00 por unidade
-let pdtEmbalagem = 5;   // Custo da embalagem por unidade
-let pdtFrete = 15;      // Frete por unidade
-let imposto = 10;       // Imposto de 10% sobre o preço de venda
-let pdtKit = 2;         // Quantidade de itens no kit
-let margemDesejada = 10; // Margem de lucro desejada: 10%
+function calcularPreco(canais, pdtCusto, pdtImposto, pdtFrete, pdtEmbalagem, pdtKit, pdtMargem) {
+    let custoTotal = (pdtCusto * pdtKit) + pdtFrete + pdtEmbalagem;
 
-let precoFinal = calcularLucro(pdtCusto, pdtEmbalagem, pdtFrete, imposto, pdtKit, margemDesejada);
-console.log(`O preço de venda para o kit é aproximadamente R$ ${precoFinal.toFixed(2)}`);
+    switch (canais) {
+        case 'mercadoLivre':
+            return calcularComImposto(custoTotal, pdtMargem, pdtImposto);
+
+        case 'shopee':
+            let precoShopee = calcularComImposto(custoTotal, pdtMargem, Imposto);
+            let taxaAdicionalShopee = 10;  // Exemplo de taxa extra
+            precoShopee += (precoShopee * taxaAdicionalShopee / 100);
+            return precoShopee;
+
+        default:
+            return 0;
+    }
+}
+
+function calcularComImposto(custoTotal, margem, imposto) {
+    let precoBase = custoTotal * (1 + margem / 100);
+    let precoVendaComImposto = precoBase / (1 - imposto / 100);
+    return precoVendaComImposto;
+}

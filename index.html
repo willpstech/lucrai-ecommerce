@@ -4,25 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=Pacifico&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <title>LUCRAI% | Calculadora de Ecommerce</title>
 </head>
-<body class="font-[Open_Sans]">
+<body class="dm-serif-text-regular">
     <container class="flex flex-col gap-3 p-3 bg-neutral-100">
-        <H1 class="font-bold text-3xl text-center">LUCRAI%</H1>
-        <div class="bg-stone-900 text-white rounded-xl py-2">
+        <H1 class="font-bold text-stone-700 text-4xl text-center pacifico-regular">% lucrai</H1>
+        <div class="bg-white rounded-xl py-2 shadow-sm  text-stone-700">
             <form id="formLucrai" action="" class="flex flex-row justify-around items-center flex-wrap p-2 rounded-md">
                 <div class="p-1">
                     <label for="pdtcusto" class="">Custo</label><br>
-                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md" type="number" id="pdtcusto" name="pdtcusto" onchange="calcularLucro()">
+                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md border-neutral-300 border-1" type="number" id="pdtcusto" name="pdtcusto" onchange="calcularLucro()">
                 </div>
                 <div class="p-1">
                     <label for="pdtcusto" class="">Imposto</label><br>
-                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md" type="number" id="pdtimposto" name="pdtimposto" onchange="calcularLucro()">
+                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md border-neutral-300 border-1" type="number" id="pdtimposto" name="pdtimposto" onchange="calcularLucro()">
                 </div>
                 <div class="p-1">
                     <label for="pdtembalagem" class="">Embalo</label><br>
-                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md" type="number" id="pdtembalagem" name="pdtembalagem" onchange="calcularLucro()">
+                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md border-neutral-300 border-1" type="number" id="pdtembalagem" name="pdtembalagem" onchange="calcularLucro()">
                 </div>
                 <div class="p-1">
                     <label for="pdtfrete" class="">Envio</label><br>
@@ -30,39 +33,39 @@
                 </div>
                 <div class="p-1">
                     <label for="pdtkit" class="mb-3">Kit</label><br>
-                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md" type="number" id="pdtkit" name="pdtkit" onchange="calcularLucro()">
+                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md border-neutral-300 border-1" type="number" id="pdtkit" name="pdtkit" onchange="calcularLucro()">
                 </div>
                 <div class="p-1">
                     <label for="pdtmargem" class="">Margem</label><br>
-                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md" type="number" id="pdtmargem" name="pdtmargem" onchange="calcularLucro()">
+                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md border-neutral-300 border-1" type="number" id="pdtmargem" name="pdtmargem" onchange="calcularLucro()">
                 </div>
             </form>
             
         </div>
 
         <div class="flex gap-3">
-            <div class="flex flex-col gap-1 items-center bg-amber-200 rounded-xl p-1">
+            <div class="flex flex-col gap-1 items-center bg-amber-200 rounded-xl p-2 shadow-sm">
                 <img src="src/images/mercadolivre.svg" alt="mercadoLivre" class="w-8 h-8">
                 <label class="switch">
                     <input type="checkbox" id="mercadoLivre" value="mercadoLivre" onchange="calcularLucro()">
                     <span class="slider"></span>
                 </label>
             </div>
-            <div class="flex flex-col gap-1 items-center bg-orange-200 rounded-xl p-1">
+            <div class="flex flex-col gap-1 items-center bg-orange-200 rounded-xl p-2 shadow-sm">
                 <img src="src/images/shopee.svg" alt="shopee" class="w-8 h-8">
                 <label class="switch">
                     <input type="checkbox" id="shopee" value="shopee" onchange="calcularLucro()">
                     <span class="slider"></span>
                 </label>
             </div>
-            <div class="flex flex-col gap-1 items-center bg-gray-200 rounded-xl p-1">
+            <div class="flex flex-col gap-1 items-center bg-gray-200 rounded-xl p-2 shadow-sm">
                 <img src="src/images/amazon.svg" alt="amazon" class="w-8 h-8">
                 <label class="switch">
                     <input type="checkbox" id="amazon" value="amazon" onchange="calcularLucro()">
                     <span class="slider"></span>
                 </label>
             </div>
-            <div class="flex flex-col gap-1 items-center bg-sky-200 rounded-xl p-1">
+            <div class="flex flex-col gap-1 items-center bg-sky-200 rounded-xl p-2 shadow-sm">
                 <img src="src/images/magalu.svg" alt="magalu" class="w-8 h-8">
                 <label class="switch">
                     <input type="checkbox" id="magalu" value="magalu" onchange="calcularLucro()">
@@ -71,7 +74,7 @@
             </div>
         </div>
 
-        <div class="p-4 bg-orange-500 rounded-xl">
+        <div class="p-4 bg-orange-200 rounded-xl shadow-md">
             <p class="mb-1" id="shopee">Shopee</p>
             <div class="flex flex-row gap-2 flex-wrap justify-between items-center">
                 <p>Venda: </p>
@@ -80,10 +83,10 @@
                 <p>Taxa: </p>
             </div>
         </div>
-        <div class="p-4 bg-amber-300 rounded-xl">
-            <p class="mb-1" id="mercadolivre">Mercado Livre</p>
+        <div class="p-4 bg-amber-200 rounded-xl shadow-md">
+            <p class="mb-1" id="meli">Mercado Livre</p>
             <div class="flex flex-row gap-2 flex-wrap justify-between items-center">
-                <p>Venda: </p>
+                <p id="vendameli">Venda: </p>
                 <p>Comissão: </p>
                 <p>Imposto: </p>
                 <p>Taxa: </p>

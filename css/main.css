@@ -1,3 +1,21 @@
+.pacifico-regular {
+    font-family: "Pacifico", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+.dm-serif-text-regular {
+  font-family: "DM Serif Text", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.dm-serif-text-regular-italic {
+  font-family: "DM Serif Text", serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
 .switch {
     position: relative;
     display: inline-block;
@@ -18,7 +36,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #c5c5c5;
+    background-color: #b0adad;
     transition: .4s;
     border-radius: 50px;
     box-shadow: 0 0 1px #05050553;
@@ -38,7 +56,7 @@
 }
 
 input:checked + .slider {
-    background-color: #93ff72;
+    background-color: #00d045;
 }
 
 input:focus + .slider {
