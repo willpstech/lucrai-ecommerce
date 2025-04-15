@@ -1,114 +1,78 @@
-/*calcularLucro = () => {
-    //variaveis para os campos de entrada de dados formatados
-    let pdtCusto = parseFloat(document.querySelector("#pdtcusto").value, 10) || 5;
-    let pdtImposto = parseInt(document.querySelector("#pdtimposto").value, 10) || 10;
-    let pdtFrete = parseFloat(document.querySelector("#pdtenvio").value, 10) || 0;
-    let pdtEmbalagem = parseFloat(document.querySelector("#pdtembalagem").value, 10) || 0;
-    let pdtKit = parseFloat(document.querySelector("#pdtkit").value, 10) || 6;
-    let pdtMargem = parseFloat(document.querySelector("#pdtmargem").value, 10) || 10;
-
-// Identifica quais switches estão selecionados
-let canais = document.querySelectorAll('input[type="checkbox"]:checked');
-let resultadosDiv = document.getElementById('resultados');
-resultadosDiv.innerHTML = '';  // Limpa resultados anteriores
-
-canais.forEach(function(canalCheckbox) {
-    let canal = canalCheckbox.value;
-    let precoVenda = calcularPreco(canal, pdtCusto, pdtEmbalagem, pdtImposto, pdtMargem, pdtKit, pdtFrete);
-    resultadosDiv.innerHTML += `<p>O preço de venda para ${canal} é R$ ${precoVenda.toFixed(2)}</p>`;
-});
-}
-
-function calcularPreco(canal, pdtCusto, pdtEmbalagem, pdtImposto, pdtMargem, pdtKit, pdtFrete) {
-// Inicialmente, estimativa inicial para o preço base um pouco alta, para garantir margem de ajuste na iteração
-let precoBase = ((pdtCusto * pdtKit) + pdtFrete + pdtEmbalagem) * 3;
-
-let margemCalculada = -1; // Para guarida no laço a margem até que seja viável
-while (Math.abs(margemCalculada - pdtMargem) > 0.0001) {
-    let custoTotal = (pdtCusto * pdtKit) + pdtFrete + pdtEmbalagem;
+const calcularLucro = () => {
+    const obterValor = (seletor) => parseFloat(document.querySelector(seletor).value) || 0;
     
-    // Com base no canal calcula a margem
-    switch (canal) {
-        case 'mercadoLivre':
-            margemCalculada = calcularMargem(precoBase, custoTotal, pdtImposto, 0, 0);
-            break;
+    const parametros = {
+        preco: obterValor("#pdtpreco") || 0,
+        custo: obterValor("#pdtcusto") || 0,
+        kit: obterValor("#pdtkit") || 0,
+        frete: obterValor("#pdtenvio") || 0,
+        embalagem: obterValor("#pdtembalagem") || 0,
+        imposto: (obterValor("#pdtimposto") || 10) / 100
+    };
 
-        case 'shopee':
-            let comissaoShopee = precoBase * 0.20;
-            let taxaVendaShopee = 4;
-            margemCalculada = calcularMargem(precoBase, custoTotal, impostoFinal, comissaoShopee, taxaVendaShopee);
-            break;
+    const canais = document.querySelectorAll('input[type="checkbox"]:checked');
+    const resultadosDiv = document.getElementById('resultados');
+    resultadosDiv.innerHTML = '';
 
-        default:
-            margemCalculada = 0; // Para prevenir valores indefinidos
-            break;
-    }
+    canais.forEach(canal => {
+        // Calcula preço de venda, lucro bruto e a margem de lucro para cada canal
+        const { lucro, margem } = calcularPrecoVenda(canal.value.toLowerCase(), parametros);
+        resultadosDiv.innerHTML += `<p class="bg-white text-center text-lg p-4 mb-4 rounded-xl shadow-sm font-[Open_Sans] text-green-700">
+        ${canal.value} : Lucro R$ ${lucro.toFixed(2)} | Margem ${margem.toFixed(2)}%
+        </p>`;
+      });
+};
 
-    // Ajusta o preço base de acordo com a diferença da margem real para a margem desejada
-    precoBase *= (1 + (pdtMargem - margemCalculada) / 100);
+const calcularPrecoVenda = (canal, { preco, custo, kit, frete, embalagem, imposto }) => {
+    let impostoVenda = preco * imposto;
+    let custoTotal = (custo * kit) + frete + embalagem + impostoVenda;
+    let lucroResultado;
+
+        switch(canal) {
+            case 'mercadolivre':
+                const comissaoMeli = preco * 0.115;
+                const taxaVendaMeli = preco < 29 ? 6.25 : preco >= 29 && preco < 50 ? 6.50 : preco >= 50 && preco < 79 ? 6.75 : 0;
+                const custoFinalMeli = comissaoMeli + taxaVendaMeli + custoTotal;
+                lucroResultado = calcularLucroBruto(preco, custoFinalMeli);
+                break;
+            
+            case 'shopee':
+                const comissaoShopee = preco * 0.20 > 100 ? 100 : preco * 0.20;
+                const taxaVendaShopee = 4;
+                const custoFinalShopee = comissaoShopee + taxaVendaShopee + custoTotal;
+                lucroResultado = calcularLucroBruto(preco, custoFinalShopee);
+                break;
+
+            case 'magalu':
+                const comissaoMagalu = preco * 0.18;
+                const taxaVendaMagalu = 5;
+                const custoFinalMagalu = comissaoMagalu + taxaVendaMagalu + custoTotal;
+                lucroResultado = calcularLucroBruto(preco, custoFinalMagalu);
+                break;
+
+            case 'amazon':
+                const comissaoAmazon = preco * 0.15;
+                const taxaVendaAmazon = preco < 30 ? 4.50 : preco >= 30 && preco < 79 ? 8.00 : 0;
+                const custoFinalAmazon = comissaoAmazon + taxaVendaAmazon + custoTotal;
+                lucroResultado = calcularLucroBruto(preco, custoFinalAmazon);
+                break;
+
+            default:
+                throw new Error(`Canal ${canal} não suportado`);
+        }
+
+    const margem = calcularMargem(preco, lucroResultado);
+    return { 
+        lucro: Number(lucroResultado),
+        margem: Number(margem)
+    };
+};
+
+const calcularLucroBruto = (preco, custoFinal) => {
+    return (preco - custoFinal);
 }
 
-return precoBase;
-}
-
-function calcularMargem(precoBase, custoTotal, pdtImposto, comissao, taxa) {
-let custoComComissaoETaxa = custoTotal + comissao + taxa + impostoFinal;
-let lucroBruto = precoBase - custoComComissaoETaxa;
-let margem = (lucroBruto / custoTotal) * 100;
-
-return margem;
-}*/
-function calcularLucro() {
-  // Variáveis para os campos de entrada de dados formatados
-  let pdtCusto = parseFloat(document.querySelector("#pdtcusto").value, 10) || 5;
-  let pdtImposto = parseInt(document.querySelector("#pdtimposto").value, 10) || 10;
-  let pdtFrete = parseFloat(document.querySelector("#pdtenvio").value, 10) || 0;
-  let pdtEmbalagem = parseFloat(document.querySelector("#pdtembalagem").value, 10) || 0;
-  let pdtKit = parseFloat(document.querySelector("#pdtkit").value, 10) || 6;
-  let pdtMargem = parseFloat(document.querySelector("#pdtmargem").value, 10) || 10;
-
-  // Identifica quais switches estão selecionados
-  let canais = document.querySelectorAll('input[type="checkbox"]:checked');
-  let resultadosDiv = document.getElementById('resultados');
-  resultadosDiv.innerHTML = ''; // Limpa resultados anteriores
-
-  canais.forEach(function (canalCheckbox) {
-      let canal = canalCheckbox.value;
-      let precoVenda = calcularPreco(canal, pdtCusto, pdtEmbalagem, pdtImposto, pdtMargem, pdtKit, pdtFrete);
-      resultadosDiv.innerHTML += `<p>O preço de venda para ${canal} é R$ ${precoVenda.toFixed(2)}</p>`;
-  });
-}
-
-function calcularPreco(canal, pdtCusto, pdtEmbalagem, pdtImposto, pdtMargem, pdtKit, pdtFrete) {
-  let custoTotal = (pdtCusto * pdtKit) + pdtFrete + pdtEmbalagem;
-  let precoBase = custoTotal; // Inicia com o custo total 
-
-  let margemCalculada = -1;
-
-  while (Math.abs(margemCalculada - pdtMargem) > 0.0001) {
-      let comissao = 0;
-      let taxa = 0;
-
-      if (canal === 'shopee') {
-          comissao = precoBase * 0.20;
-          taxa = 4;
-      }
-
-      // Calcula margem baseada nas custo, comissões, taxas, e impostos
-      margemCalculada = calcularMargem(precoBase, custoTotal, pdtImposto, comissao, taxa);
-
-      // Ajusta 'precoBase'
-      precoBase *= (1 + (pdtMargem - margemCalculada) / 100);
-  }
-
-  return precoBase;
-}
-
-function calcularMargem(precoBase, custoTotal, pdtImposto, comissao, taxa) {
-  let precoLiquido = precoBase - comissao - taxa;
-  let custoComImposto = custoTotal + (precoBase * (pdtImposto / 100));
-  let lucroBruto = precoLiquido - custoComImposto;
-  let margem = (lucroBruto / custoComImposto) * 100;  // Corrigi a fórmula da margem
-
-  return margem;
-}
+const calcularMargem = (preco, lucro) => { 
+    if (preco === 0) return 0; 
+    return (lucro / preco) * 100; 
+};

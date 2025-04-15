@@ -66,3 +66,9 @@ input:focus + .slider {
 input:checked + .slider:before {
     transform: translateX(16px);
 }
+@media (max-width: 768px) {
+    .item {
+        flex: 0 0 30%;
+        
+    }
+}

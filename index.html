@@ -11,33 +11,33 @@
     <title>LUCRAI% | Calculadora de Ecommerce</title>
 </head>
 <body class="dm-serif-text-regular">
-    <container class="flex flex-col gap-3 p-3 bg-neutral-100">
+    <container class="flex flex-col gap-3 p-3 bg-neutral-100 min-h-screen">
         <H1 class="font-bold text-stone-700 text-4xl text-center pacifico-regular">% lucrai</H1>
         <div class="bg-white rounded-xl py-2 shadow-sm  text-stone-700">
-            <form id="formLucrai" action="" class="flex flex-row justify-around items-center flex-wrap p-2 rounded-md">
-                <div class="p-1">
+            <form id="formLucrai" action="" class="flex flex-row justify-evenly flex-wrap p-2 rounded-md text-center">
+                <div class="p-1 item">
+                    <label for="pdtpreco" class="">Preço R$</label><br>
+                    <input class="w-24 h-7 pl-2 text-stone-950 bg-gray-100 rounded-md border-neutral-300 border-1" type="number" id="pdtpreco" name="pdtpreco" onchange="calcularLucro()">
+                </div>
+                <div class="p-1 item">
                     <label for="pdtcusto" class="">Custo</label><br>
-                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md border-neutral-300 border-1" type="number" id="pdtcusto" name="pdtcusto" onchange="calcularLucro()">
+                    <input class="w-24 h-7 pl-2 text-stone-950 bg-gray-100 rounded-md border-neutral-300 border-1" type="number" id="pdtcusto" name="pdtcusto" onchange="calcularLucro()">
                 </div>
-                <div class="p-1">
-                    <label for="pdtcusto" class="">Imposto</label><br>
-                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md border-neutral-300 border-1" type="number" id="pdtimposto" name="pdtimposto" onchange="calcularLucro()">
-                </div>
-                <div class="p-1">
-                    <label for="pdtembalagem" class="">Embalo</label><br>
-                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md border-neutral-300 border-1" type="number" id="pdtembalagem" name="pdtembalagem" onchange="calcularLucro()">
-                </div>
-                <div class="p-1">
-                    <label for="pdtfrete" class="">Envio</label><br>
-                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md  border-neutral-300 border-1" type="number" id="pdtenvio" name="pdtenvio" onchange="calcularLucro()">
-                </div>
-                <div class="p-1">
+                <div class="p-1 item">
                     <label for="pdtkit" class="mb-3">Kit</label><br>
-                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md border-neutral-300 border-1" type="number" id="pdtkit" name="pdtkit" onchange="calcularLucro()">
+                    <input class="w-24 h-7 pl-2 text-stone-950 bg-gray-100 rounded-md border-neutral-300 border-1" type="number" id="pdtkit" name="pdtkit" onchange="calcularLucro()">
                 </div>
-                <div class="p-1">
-                    <label for="pdtmargem" class="">Margem</label><br>
-                    <input class="w-24 h-7 text-stone-950 bg-gray-100 rounded-md border-neutral-300 border-1" type="number" id="pdtmargem" name="pdtmargem" onchange="calcularLucro()">
+                <div class="p-1 item">
+                    <label for="pdtcusto" class="">Imposto</label><br>
+                    <input class="w-24 h-7 pl-2 text-stone-950 bg-gray-100 rounded-md border-neutral-300 border-1" type="number" id="pdtimposto" name="pdtimposto" onchange="calcularLucro()">
+                </div>
+                <div class="p-1 item">
+                    <label for="pdtembalagem" class="">Embalo</label><br>
+                    <input class="w-24 h-7 pl-2 text-stone-950 bg-gray-100 rounded-md border-neutral-300 border-1" type="number" id="pdtembalagem" name="pdtembalagem" onchange="calcularLucro()">
+                </div>
+                <div class="p-1 item">
+                    <label for="pdtfrete" class="">Envio</label><br>
+                    <input class="w-24 h-7 pl-2 text-stone-950 bg-gray-100 rounded-md  border-neutral-300 border-1" type="number" id="pdtenvio" name="pdtenvio" onchange="calcularLucro()">
                 </div>
             </form>
             
@@ -45,35 +45,35 @@
 
         <div class="flex gap-3">
             <div class="flex flex-col gap-1 items-center bg-amber-200 rounded-xl p-2 shadow-sm">
-                <img src="src/images/mercadolivre.svg" alt="mercadoLivre" class="w-8 h-8">
+                <img src="src/images/mercadolivre.svg" alt="MercadoLivre" class="w-8 h-8">
                 <label class="switch">
-                    <input type="checkbox" id="mercadoLivre" value="mercadoLivre" onchange="calcularLucro()">
+                    <input type="checkbox" id="MercadoLivre" value="MercadoLivre" onchange="calcularLucro()">
                     <span class="slider"></span>
                 </label>
             </div>
             <div class="flex flex-col gap-1 items-center bg-orange-200 rounded-xl p-2 shadow-sm">
                 <img src="src/images/shopee.svg" alt="shopee" class="w-8 h-8">
                 <label class="switch">
-                    <input type="checkbox" id="shopee" value="shopee" onchange="calcularLucro()">
+                    <input type="checkbox" id="Shopee" value="Shopee" onchange="calcularLucro()">
                     <span class="slider"></span>
                 </label>
             </div>
             <div class="flex flex-col gap-1 items-center bg-gray-200 rounded-xl p-2 shadow-sm">
                 <img src="src/images/amazon.svg" alt="amazon" class="w-8 h-8">
                 <label class="switch">
-                    <input type="checkbox" id="amazon" value="amazon" onchange="calcularLucro()">
+                    <input type="checkbox" id="amazon" value="Amazon" onchange="calcularLucro()">
                     <span class="slider"></span>
                 </label>
             </div>
             <div class="flex flex-col gap-1 items-center bg-sky-200 rounded-xl p-2 shadow-sm">
                 <img src="src/images/magalu.svg" alt="magalu" class="w-8 h-8">
                 <label class="switch">
-                    <input type="checkbox" id="magalu" value="magalu" onchange="calcularLucro()">
+                    <input type="checkbox" id="magalu" value="Magalu" onchange="calcularLucro()">
                     <span class="slider"></span>
                 </label>
             </div>
         </div>
-
+        <!--
         <div class="p-4 bg-orange-200 rounded-xl shadow-md">
             <p class="mb-1" id="shopee">Shopee</p>
             <div class="flex flex-row gap-2 flex-wrap justify-between items-center">
@@ -91,9 +91,9 @@
                 <p>Imposto: </p>
                 <p>Taxa: </p>
             </div>
-        </div>
-        <div id="resultados">
-            Resultados
+        </div>-->
+        <div id="resultados" class="mt-2">
+            <p class="bg-white text-center text-lg p-4 rounded-xl shadow-sm font-[Open_Sans] text-green-700">Ative os Canais de Marketplace para Calcular</p>
         </div>
     </container>
 
