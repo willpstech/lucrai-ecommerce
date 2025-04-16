@@ -4,7 +4,7 @@ const calcularLucro = () => {
     const parametros = {
         preco: obterValor("#pdtpreco") || 0,
         custo: obterValor("#pdtcusto") || 0,
-        kit: obterValor("#pdtkit") || 0,
+        kit: obterValor("#pdtkit") || 1,
         frete: obterValor("#pdtenvio") || 0,
         embalagem: obterValor("#pdtembalagem") || 0,
         imposto: (obterValor("#pdtimposto") || 10) / 100
@@ -17,7 +17,7 @@ const calcularLucro = () => {
     canais.forEach(canal => {
         // Calcula preço de venda, lucro bruto e a margem de lucro para cada canal
         const { lucro, margem } = calcularPrecoVenda(canal.value.toLowerCase(), parametros);
-        resultadosDiv.innerHTML += `<p class="bg-white text-center text-lg p-4 mb-4 rounded-xl shadow-sm font-[Open_Sans] text-green-700">
+        resultadosDiv.innerHTML += `<p class="bg-white text-center text-lg p-4 mb-4 rounded-xl shadow-sm font-[Open_Sans] text-slate-950">
         ${canal.value} : Lucro R$ ${lucro.toFixed(2)} | Margem ${margem.toFixed(2)}%
         </p>`;
       });
