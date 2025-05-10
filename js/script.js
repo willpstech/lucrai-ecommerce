@@ -41,7 +41,7 @@ const channelFeeRules = {
   },
   amazon: price => {
     // Exemplo: 2% sobre o preço + R$1 fixo
-    return price < 30 ? 4.50 : price >= 30 && price < 79 ? 8.00 : 0;
+    return price > 0 && price < 30 ? 4.50 : price >= 30 && price < 79 ? 8.00 : 0;
   },
   magalu: price => {
     return price > 1 ? 5.00 : 0 // fixa
@@ -110,95 +110,112 @@ function calculateAll() {
   });
 }
 
-// 7) Renderiza/atualiza card de um canal
+// 7) Renderiza o card de cada canal com os dados calculados
 function renderChannelCard(key, nome, params) {
-  const state      = channelStates[key];
-  const opts       = commissionOptionsMap[key] || [];
-  const price      = params.preco;
-  const kitCost    = params.custo * params.kit;
-  const taxAmt     = price * params.impostoPct;
-  const commRate   = state.commission;
-  const baseRate   = commRate === 'custom' ? state.customCommission : commRate;
-  const commAmt    = price * baseRate;
-  const fee        = (channelFeeRules[key] || (() => 0))(price);
-  const totalCost  = kitCost + fee + commAmt + params.frete + params.embalagem + taxAmt;
-  const lucro      = price - totalCost;
-  const margem     = price ? (lucro / price) * 100 : 0;
+  const state    = channelStates[key];
+  const opts     = commissionOptionsMap[key] || [];
+  const price    = params.preco;
+  const kitCost  = params.custo * params.kit;
+  const taxAmt   = price * params.impostoPct;
+  const commRate = state.commission;
+  const baseRate = commRate === 'custom' ? state.customCommission : commRate;
+
+  // Limitação da comissão da Shopee a R$100
+  const commAmtUncapped = price * baseRate;
+  let commAmt = commAmtUncapped;
+  if (key === 'shopee' && commAmt > 100) {
+    commAmt = 100;
+  }
+
+  const fee       = (channelFeeRules[key] || (() => 0))(price);
+  const totalCost = kitCost + fee + commAmt + params.frete + params.embalagem + taxAmt;
+  const lucro     = price - totalCost;
+  const margem    = price ? (lucro / price) * 100 : 0;
+
+  // Define a cor de fundo para todos os blocos (Venda, Lucro e Margem) baseando no valor da Margem
+  let blocosBgColor;
+  if (margem < 0) {
+    blocosBgColor = 'bg-[#FDE2E1]'; // Vermelho para margem negativa
+  } else if (margem >= 0 && margem <= 5) {
+    blocosBgColor = 'bg-[#FEF3C7]'; // Amarelo para margem entre 0% e 5%
+  } else {
+    blocosBgColor = 'bg-[#DCFCE7]'; // Verde para margem maior que 5%
+  }
 
   const card = document.createElement('div');
-  card.className = 'card bg-white rounded-xl shadow-md text-stone-700 w-full max-w-md px-4 py-3 mb-4 border border-stone-200';
+  card.className = 'card bg-[#F7F9FC] rounded-2xl shadow-lg w-full max-w-xl p-6 border border-[#E4E9F0]';
 
   card.innerHTML = `
     <!-- HEADER -->
-    <div class="flex justify-between items-center border-b border-stone-200 pb-3 mb-3">
+    <div class="flex justify-between items-center mb-4">
       <div>
-        <h3 class="font-bold text-lg text-stone-800">${nome}</h3>
-        <p class="text-xs text-stone-500">Escolha a comissão</p>
+        <h3 class="font-semibold text-lg text-[#334155]">${nome}</h3>
+        <p class="text-sm text-[#64748B]">Escolha a opção de comissão</p>
       </div>
-      <div class="flex items-center space-x-2">
-        <select class="commission-select text-xs p-1 border rounded bg-gray-50 shadow-sm">
+      <div class="flex items-center space-x-2 w-1/3">
+        <select class="commission-select w-full text-sm p-2 border rounded bg-gray-50 shadow-sm">
           ${opts.map(o => `
             <option value="${o.value}" ${o.value === commRate ? 'selected' : ''}>
               ${o.label}
             </option>`).join('')}
         </select>
         <input type="number"
-               class="custom-commission text-xs p-1 border rounded w-16 bg-gray-50 shadow-sm"
+               class="custom-commission text-sm p-2 border rounded w-16 bg-gray-50"
                placeholder="%"
                style="display: ${commRate === 'custom' ? 'block' : 'none'}"
                value="${commRate === 'custom'
-                        ? (state.customCommission * 100).toFixed(2)
+                        ? (state.customCommission * 100).toFixed(2) 
                         : ''}"
         />
       </div>
     </div>
 
-    <!-- BODY -->
-    <div class="grid grid-cols-3 gap-2 text-xs">
-      <div class="bg-stone-50 p-2 rounded-lg shadow-sm">
-        <p class="text-stone-500 font-medium">Venda</p>
-        <p class="text-stone-800 font-semibold">R$ ${price.toFixed(2)}</p>
+    <!-- GRID DE INFORMAÇÕES EM 3 COLUNAS -->
+    <div class="grid grid-cols-3 gap-4">
+      <div class="bg-[#F1F5F9] p-3 rounded-lg">
+        <p class="text-xs md:text-sm text-[#475569]">Custo Total</p>
+        <p class="font-bold text-[#0F172A] text-sm md:text-base">R$ ${kitCost.toFixed(2)}</p>
       </div>
-      <div class="bg-stone-50 p-2 rounded-lg shadow-sm">
-        <p class="text-stone-500 font-medium">Custo Total</p>
-        <p class="text-stone-800 font-semibold">R$ ${kitCost.toFixed(2)}</p>
+      <div class="bg-[#F1F5F9] p-3 rounded-lg">
+        <p class="text-xs md:text-sm text-[#475569]">Taxa de Venda</p>
+        <p class="font-bold text-[#0F172A] text-sm md:text-base">R$ ${fee.toFixed(2)}</p>
       </div>
-      <div class="bg-stone-50 p-2 rounded-lg shadow-sm">
-        <p class="text-stone-500 font-medium">Taxa de venda</p>
-        <p class="text-stone-800 font-semibold">R$ ${fee.toFixed(2)}</p>
+      <div class="bg-[#F1F5F9] p-3 rounded-lg">
+        <p class="text-xs md:text-sm text-[#475569]">Comissão</p>
+        <p class="font-bold text-[#0F172A] text-sm md:text-base">R$ ${commAmt.toFixed(2)}</p>
       </div>
-      <div class="bg-stone-50 p-2 rounded-lg shadow-sm">
-        <p class="text-stone-500 font-medium">Comissão</p>
-        <p class="text-stone-800 font-semibold">R$ ${commAmt.toFixed(2)}</p>
+      <div class="bg-[#F1F5F9] p-3 rounded-lg">
+        <p class="text-xs md:text-sm text-[#475569]">Frete</p>
+        <p class="font-bold text-[#0F172A] text-sm md:text-base">R$ ${params.frete.toFixed(2)}</p>
       </div>
-      <div class="bg-stone-50 p-2 rounded-lg shadow-sm">
-        <p class="text-stone-500 font-medium">Frete</p>
-        <p class="text-stone-800 font-semibold">R$ ${params.frete.toFixed(2)}</p>
+      <div class="bg-[#F1F5F9] p-3 rounded-lg">
+        <p class="text-xs md:text-sm text-[#475569]">Embalagem</p>
+        <p class="font-bold text-[#0F172A] text-sm md:text-base">R$ ${params.embalagem.toFixed(2)}</p>
       </div>
-      <div class="bg-stone-50 p-2 rounded-lg shadow-sm">
-        <p class="text-stone-500 font-medium">Embalagem</p>
-        <p class="text-stone-800 font-semibold">R$ ${params.embalagem.toFixed(2)}</p>
-      </div>
-      <div class="bg-stone-50 p-2 rounded-lg shadow-sm col-span-1">
-        <p class="text-stone-500 font-medium">Imposto</p>
-        <p class="text-stone-800 font-semibold">R$ ${taxAmt.toFixed(2)}</p>
+      <div class="bg-[#F1F5F9] p-3 rounded-lg">
+        <p class="text-xs md:text-sm text-[#475569]">Imposto</p>
+        <p class="font-bold text-[#0F172A] text-sm md:text-base">R$ ${taxAmt.toFixed(2)}</p>
       </div>
     </div>
 
-    <!-- FOOTER -->
-    <div class="border-t border-stone-200 mt-3 pt-3 flex justify-evenly items-center bg-amber-50 rounded-lg py-2 px-3">
-      <div>
-        <p class="text-xs text-stone-500">Lucro</p>
-        <p class="text-base font-bold text-stone-800">R$ ${lucro.toFixed(2)}</p>
+    <!-- VENDA, LUCRO E MARGEM EM BLOCOS INDIVIDUAIS -->
+    <div class="grid grid-cols-3 gap-4 mt-5">
+      <div class="p-4 rounded-lg ${blocosBgColor} shadow-sm">
+        <p class="text-xs md:text-sm text-[#475569]">Venda</p>
+        <p class="font-bold text-[#0F172A] text-md md:text-xl">R$ ${price.toFixed(2)}</p>
       </div>
-      <div class="text-right">
-        <p class="text-xs text-stone-500">Margem</p>
-        <p class="text-base font-bold text-stone-800">${margem.toFixed(2)}%</p>
+      <div class="p-4 rounded-lg ${blocosBgColor} shadow-sm">
+        <p class="text-xs md:text-sm text-[#475569]">Lucro</p>
+        <p class="font-bold text-[#0F172A] text-md md:text-xl">R$ ${lucro.toFixed(2)}</p>
+      </div>
+      <div class="p-4 rounded-lg ${blocosBgColor} shadow-sm">
+        <p class="text-xs md:text-sm text-[#475569]">Margem</p>
+        <p class="font-bold text-[#0F172A] text-md md:text-xl">${margem.toFixed(2)}%</p>
       </div>
     </div>
   `;
 
-  // Eventos para comissão
+  // Eventos de mudança do select e input custom
   const sel = card.querySelector('.commission-select');
   const inp = card.querySelector('.custom-commission');
 
