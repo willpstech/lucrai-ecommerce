@@ -10,10 +10,10 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <title>LUCRAI% | Calculadora de Ecommerce</title>
 </head>
-<body class="dm-serif-text-regular">
-    <container class="flex flex-col gap-3 p-3 bg-neutral-100 min-h-screen">
+<body class="dm-serif-text-regular bg-[#F7F9FC]">
+    <container class="flex flex-col gap-3 p-4 bg-neutral-100 min-h-screen max-w-3xl mx-auto">
         <H1 class="font-bold text-stone-700 text-4xl text-center pacifico-regular">% lucrai</H1>
-        <div class="bg-white rounded-xl py-2 shadow-sm  text-stone-700">
+        <div class="bg-white rounded-xl py-2 shadow-sm  text-stone-700 sticky top-0 z-1">
             <form id="formLucrai" action="" class="flex flex-row justify-evenly flex-wrap p-2 rounded-md text-center">
                 <div class="p-1 item">
                     <label for="pdtpreco" class="">Preço R$</label><br>
@@ -72,6 +72,20 @@
                     <span class="slider"></span>
                 </label>
             </div>
+            <div class="flex flex-col gap-1 items-center bg-slate-50 rounded-xl p-2 shadow-sm">
+                <img src="src/images/tiktok.png" alt="tiktok" class="w-8 h-8">
+                <label class="switch">
+                    <input type="checkbox" id="Tiktok" value="Tiktok" onchange="calcularLucro()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="flex flex-col gap-1 items-center bg-zinc-300 rounded-xl p-2 shadow-sm">
+                <img src="src/images/shein.svg" alt="shein" class="w-8 h-8">
+                <label class="switch">
+                    <input type="checkbox" id="Shein" value="Shein" onchange="calcularLucro()">
+                    <span class="slider"></span>
+                </label>
+            </div>
         </div>
         <!--
         <div class="p-4 bg-orange-200 rounded-xl shadow-md">
@@ -92,7 +106,7 @@
                 <p>Taxa: </p>
             </div>
         </div>-->
-        <div id="resultados" class="mt-2">
+        <div id="resultados" class="">
             <p class="bg-white text-center text-lg p-4 rounded-xl shadow-sm font-[Open_Sans] text-slate-950">Ative os Canais de Marketplace para Calcular</p>
         </div>
     </container>

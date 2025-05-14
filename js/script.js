@@ -3,8 +3,8 @@
 // 1) Opções de comissão específicas por canal
 const commissionOptionsMap = {
   mercadolivre: [
-    { label: 'Clássico 11.5%', value: 0.115 },
-    { label: 'Premium 16.5%', value: 0.165 },
+    { label: '11.5%', value: 0.115 },
+    { label: '16.5%', value: 0.165 },
     { label: 'Custom', value: 'custom' }
   ],
   shopee: [
@@ -27,6 +27,17 @@ const commissionOptionsMap = {
     { label: '14.5%', value: 0.145 },
     { label: '18%', value: 0.18 },
     { label: 'Custom', value: 'custom' }
+  ],
+  tiktok: [
+    { label: '6%', value: 0.06 },
+    { label: '12%', value: 0.12 },
+    { label: '14%', value: 0.14 },
+    { label: '16%', value: 0.16 },
+    { label: 'Custom', value: 'custom' }
+  ],
+  shein: [
+    { label: '16%', value: 0.16 },
+    { label: 'Custom', value: 'custom' }
   ]
 };
 
@@ -45,6 +56,12 @@ const channelFeeRules = {
   },
   magalu: price => {
     return price > 1 ? 5.00 : 0 // fixa
+  },
+  tiktok: price => {
+    return price > 1 && price < 79 ? 2.00 : 0 // fixa
+  },
+  shein: price => {
+    return price > 1 ? 0.00 : 0 // fixa
   }
 };
 
@@ -72,7 +89,7 @@ function calculateAll() {
   const preco     = parseFloat(document.getElementById('pdtpreco').value)   || 0;
   const custo     = parseFloat(document.getElementById('pdtcusto').value)   || 0;
   const kit       = parseInt  (document.getElementById('pdtkit').value, 10) || 1;
-  const impostoPct= (parseFloat(document.getElementById('pdtimposto').value)|| 0) / 100;
+  const impostoPct= (parseFloat(document.getElementById('pdtimposto').value)|| 10) / 100;
   const embalagem = parseFloat(document.getElementById('pdtembalagem').value)|| 0;
   const frete     = parseFloat(document.getElementById('pdtenvio').value)   || 0;
   const params    = { preco, custo, kit, impostoPct, embalagem, frete };
@@ -143,7 +160,7 @@ function renderChannelCard(key, nome, params) {
   }
 
   const card = document.createElement('div');
-  card.className = 'card bg-[#F7F9FC] rounded-2xl shadow-lg w-full max-w-xl p-6 border border-[#E4E9F0]';
+  card.className = 'card bg-[#F7F9FC] rounded-2xl shadow-lg w-full max-w-xl p-4 border border-[#E4E9F0] mb-4 justify-self-center';
 
   card.innerHTML = `
     <!-- HEADER -->
@@ -200,15 +217,15 @@ function renderChannelCard(key, nome, params) {
 
     <!-- VENDA, LUCRO E MARGEM EM BLOCOS INDIVIDUAIS -->
     <div class="grid grid-cols-3 gap-4 mt-5">
-      <div class="p-4 rounded-lg ${blocosBgColor} shadow-sm">
+      <div class="p-3 rounded-lg ${blocosBgColor} shadow-sm">
         <p class="text-xs md:text-sm text-[#475569]">Venda</p>
         <p class="font-bold text-[#0F172A] text-md md:text-xl">R$ ${price.toFixed(2)}</p>
       </div>
-      <div class="p-4 rounded-lg ${blocosBgColor} shadow-sm">
+      <div class="p-3 rounded-lg ${blocosBgColor} shadow-sm">
         <p class="text-xs md:text-sm text-[#475569]">Lucro</p>
         <p class="font-bold text-[#0F172A] text-md md:text-xl">R$ ${lucro.toFixed(2)}</p>
       </div>
-      <div class="p-4 rounded-lg ${blocosBgColor} shadow-sm">
+      <div class="p-3 rounded-lg ${blocosBgColor} shadow-sm">
         <p class="text-xs md:text-sm text-[#475569]">Margem</p>
         <p class="font-bold text-[#0F172A] text-md md:text-xl">${margem.toFixed(2)}%</p>
       </div>
