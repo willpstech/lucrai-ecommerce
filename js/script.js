@@ -15,20 +15,21 @@ const commissionOptionsMap = {
     { label: 'Custom', value: 'custom' }
   ],
   amazon: [
+    { label: '12%', value: 0.12 },
     { label: '10%', value: 0.10 },
     { label: '11%', value: 0.11 },
-    { label: '12%', value: 0.12 },
     { label: '13%', value: 0.13 },
     { label: '14%', value: 0.14 },
     { label: '15%', value: 0.15 },
     { label: 'Custom', value: 'custom' }
   ],
   magalu: [
-    { label: '14.5%', value: 0.145 },
     { label: '18%', value: 0.18 },
+    { label: '14.5%', value: 0.145 },
     { label: 'Custom', value: 'custom' }
   ],
   tiktok: [
+    { label: '18%', value: 0.18 },
     { label: '6%', value: 0.06 },
     { label: '12%', value: 0.12 },
     { label: '14%', value: 0.14 },
