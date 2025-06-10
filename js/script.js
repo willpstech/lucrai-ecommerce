@@ -39,6 +39,23 @@ const commissionOptionsMap = {
   shein: [
     { label: '16%', value: 0.16 },
     { label: 'Custom', value: 'custom' }
+  ],
+  nuvemshop: [
+    { label: 'PIX', value: 0.0099 },
+    { label: 'boleto', value: 0 },
+    { label: '1x', value: 0.0499 },
+    { label: '2x', value: 0.0797 },
+    { label: '3x', value: 0.0946 },
+    { label: '4x', value: 0.1095 },
+    { label: '5x', value: 0.1244 },
+    { label: '6x', value: 0.1393 },
+    { label: '7x', value: 0.1542 },
+    { label: '8x', value: 0.1691 },
+    { label: '9x', value: 0.1840 },
+    { label: '10x', value: 0.1989 },
+    { label: '11x', value: 0.2138 },
+    { label: '12x', value: 0.2287 },
+    { label: 'Custom', value: 'custom' }
   ]
 };
 
@@ -63,6 +80,16 @@ const channelFeeRules = {
   },
   shein: price => {
     return price > 1 ? 0.00 : 0 // fixa
+  },
+  nuvemshop: (price, label) => {
+    if (!price) return 0;
+    const parcelas = [
+        '1x','2x','3x','4x','5x','6x','7x','8x','9x','10x','11x','12x'
+    ];
+    if (parcelas.includes(label)) return 0.35;
+    if (label === 'PIX') return 0;
+    if (label === 'boleto') return 2.39;
+    return 0;
   }
 };
 
@@ -145,7 +172,17 @@ function renderChannelCard(key, nome, params) {
     commAmt = 100;
   }
 
-  const fee       = (channelFeeRules[key] || (() => 0))(price);
+  // Nuvemshop tem regras especiais para taxa de venda
+  if (key === 'nuvemshop') {
+    // Descobre o label selecionado no select
+    const selectedOption = opts.find(o => o.value === state.commission);
+    const label = selectedOption ? selectedOption.label : '';
+    fee = (channelFeeRules[key] || (() => 0))(price, label);
+  } else {
+    fee = (channelFeeRules[key] || (() => 0))(price);
+  }
+
+  //const fee       = (channelFeeRules[key] || (() => 0))(price);
   const totalCost = kitCost + fee + commAmt + params.frete + params.embalagem + taxAmt;
   const lucro     = price - totalCost;
   const margem    = price ? (lucro / price) * 100 : 0;
